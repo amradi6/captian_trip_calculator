@@ -4,10 +4,29 @@
 <dict>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
+
+	<!-- Location permissions for Geolocator -->
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Used to detect your pickup location for trip calculation.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Used to track your trip route.</string>
+
+	<!-- Google Sign-In URL scheme from GoogleService-Info.plist REVERSED_CLIENT_ID -->
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.621029142110-33leiq0ld93ihh49vtgin4u6k5fsu91r</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>Captian Trip Calculator</string>
+	<string>Captain</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>

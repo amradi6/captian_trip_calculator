@@ -38,13 +38,14 @@ class DefaultFirebaseOptions {
     databaseURL: 'https://trip-calc-110-default-rtdb.firebaseio.com',
   );
 
-  // TODO: Replace with values from GoogleService-Info.plist once you have it
+  // Values from GoogleService-Info.plist
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'REPLACE_WITH_IOS_API_KEY',
-    appId: 'REPLACE_WITH_IOS_APP_ID',
+    apiKey: 'AIzaSyBrAiJ7qfuHPwSSdUkJa-bp9AC_nqUouK0',
+    appId: '1:621029142110:ios:2fc672ba313eae46250ecf',
     messagingSenderId: '621029142110',
     projectId: 'trip-calc-110',
     storageBucket: 'trip-calc-110.firebasestorage.app',
-    iosBundleId: 'com.mycompany.captaintripcalculator',
+    iosBundleId: 'com.mycompany.captainridecalc',
+    databaseURL: 'https://trip-calc-110-default-rtdb.firebaseio.com',
   );
 }
