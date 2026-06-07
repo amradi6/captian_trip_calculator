@@ -1,0 +1,115 @@
+{
+  "project_info": {
+    "project_number": "621029142110",
+    "firebase_url": "https://trip-calc-110-default-rtdb.firebaseio.com",
+    "project_id": "trip-calc-110",
+    "storage_bucket": "trip-calc-110.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:621029142110:android:41faeb606dbad605250ecf",
+        "android_client_info": {
+          "package_name": "com.mycompany.captainridecalc"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "621029142110-180k621suhl4kk15ta03o649ov2hj3im.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mycompany.captainridecalc",
+            "certificate_hash": "9bbb3186b2189ef16d8f272bdab59362c395cbb4"
+          }
+        },
+        {
+          "client_id": "621029142110-avks8ermltl9i1p5ejr1t0qjp3d00ee2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mycompany.captainridecalc",
+            "certificate_hash": "d4b90f2dfafc736205a98bf3ae6541431bc77d8e"
+          }
+        },
+        {
+          "client_id": "621029142110-n2u7lfug37n97o1ppn1thrnibi2t2c2g.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC05OdatNgSSXtkYuiDOVXh87OtHAfMcM8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "621029142110-n2u7lfug37n97o1ppn1thrnibi2t2c2g.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "621029142110-33leiq0ld93ihh49vtgin4u6k5fsu91r.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.mycompany.captainridecalc"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:621029142110:android:be3ddfeee75a7eb9250ecf",
+        "android_client_info": {
+          "package_name": "com.mycompany.captaintripcalculator"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "621029142110-6bikcrj9dp02eppkn3fnc0fg8ug40sks.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mycompany.captaintripcalculator",
+            "certificate_hash": "9bbb3186b2189ef16d8f272bdab59362c395cbb4"
+          }
+        },
+        {
+          "client_id": "621029142110-ee9dl8p4d5eahbep55novpb2b5aohvv2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mycompany.captaintripcalculator",
+            "certificate_hash": "2736fab291f04e69b62d490c3c09361f5b82461a"
+          }
+        },
+        {
+          "client_id": "621029142110-n2u7lfug37n97o1ppn1thrnibi2t2c2g.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC05OdatNgSSXtkYuiDOVXh87OtHAfMcM8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "621029142110-n2u7lfug37n97o1ppn1thrnibi2t2c2g.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "621029142110-33leiq0ld93ihh49vtgin4u6k5fsu91r.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.mycompany.captainridecalc"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
