@@ -80,20 +80,32 @@ class StatCard extends StatelessWidget {
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
         children: [
           Container(
-            width: 40,
-            height: 40,
+            width: 36,
+            height: 36,
             decoration: BoxDecoration(
               color: iconBg,
-              borderRadius: BorderRadius.circular(10),
+              borderRadius: BorderRadius.circular(9),
             ),
-            child: Icon(icon, color: Colors.white, size: 20),
+            child: Icon(icon, color: Colors.white, size: 18),
           ),
-          const SizedBox(height: 10),
-          Text(label, style: Theme.of(context).textTheme.bodySmall),
+          const SizedBox(height: 6),
+          Text(
+            label,
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 11),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
           const SizedBox(height: 2),
-          Text(value, style: Theme.of(context).textTheme.titleMedium),
+          Expanded(
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              alignment: Alignment.centerLeft,
+              child: Text(value, style: Theme.of(context).textTheme.titleSmall),
+            ),
+          ),
         ],
       ),
     );

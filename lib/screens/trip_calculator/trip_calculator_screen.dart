@@ -11,6 +11,9 @@ import '../../utils/app_colors.dart';
 import '../../utils/l10n.dart';
 import '../../widgets/shared_widgets.dart';
 
+// Use legacy renderer on Android to avoid emulator crashes with Vulkan
+// ignore: avoid_classes_with_only_static_members
+
 class TripCalculatorScreen extends StatefulWidget {
   const TripCalculatorScreen({super.key});
 
@@ -23,6 +26,7 @@ class _TripCalculatorScreenState extends State<TripCalculatorScreen> {
   LatLng? _currentPos;
   LatLng? _destPos;
   String _pickupText = '';
+  bool _mapError = false;
 
   final _destCtrl = TextEditingController();
   final _pricePerKmCtrl = TextEditingController(text: '2.10');
@@ -139,6 +143,66 @@ class _TripCalculatorScreenState extends State<TripCalculatorScreen> {
     }
   }
 
+  Widget _buildMap() {
+    return Builder(builder: (context) {
+      try {
+        return GoogleMap(
+          initialCameraPosition: CameraPosition(
+            target: _currentPos ?? const LatLng(24.7136, 46.6753),
+            zoom: 13,
+          ),
+          onMapCreated: (c) => _mapCtrl = c,
+          myLocationEnabled: true,
+          myLocationButtonEnabled: false,
+          zoomControlsEnabled: false,
+          mapToolbarEnabled: false,
+          markers: {
+            if (_currentPos != null)
+              Marker(
+                markerId: const MarkerId('pickup'),
+                position: _currentPos!,
+                icon: BitmapDescriptor.defaultMarkerWithHue(
+                    BitmapDescriptor.hueBlue),
+              ),
+            if (_destPos != null)
+              Marker(
+                markerId: const MarkerId('dest'),
+                position: _destPos!,
+              ),
+          },
+        );
+      } catch (_) {
+        WidgetsBinding.instance.addPostFrameCallback(
+          (_) => setState(() => _mapError = true),
+        );
+        return _mapFallback(context);
+      }
+    });
+  }
+
+  Widget _mapFallback(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
+    return Container(
+      color: cs.surface,
+      child: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(Icons.map_outlined, size: 48, color: cs.secondary),
+            const SizedBox(height: 8),
+            Text('Map unavailable on this device',
+              style: Theme.of(context).textTheme.bodySmall),
+            const SizedBox(height: 6),
+            TextButton(
+              onPressed: () => setState(() => _mapError = false),
+              child: const Text('Retry'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final appState = context.watch<AppStateProvider>();
@@ -154,31 +218,7 @@ class _TripCalculatorScreenState extends State<TripCalculatorScreen> {
             height: 220,
             child: Stack(
               children: [
-                GoogleMap(
-                  initialCameraPosition: CameraPosition(
-                    target: _currentPos ?? const LatLng(24.7136, 46.6753),
-                    zoom: 13,
-                  ),
-                  onMapCreated: (c) => _mapCtrl = c,
-                  myLocationEnabled: true,
-                  myLocationButtonEnabled: false,
-                  zoomControlsEnabled: false,
-                  mapToolbarEnabled: false,
-                  markers: {
-                    if (_currentPos != null)
-                      Marker(
-                        markerId: const MarkerId('pickup'),
-                        position: _currentPos!,
-                        icon: BitmapDescriptor.defaultMarkerWithHue(
-                          BitmapDescriptor.hueBlue),
-                      ),
-                    if (_destPos != null)
-                      Marker(
-                        markerId: const MarkerId('dest'),
-                        position: _destPos!,
-                      ),
-                  },
-                ),
+                _mapError ? _mapFallback(context) : _buildMap(),
                 // Safe area top
                 SafeArea(
                   child: Padding(

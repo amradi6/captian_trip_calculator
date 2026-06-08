@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import 'firebase_options.dart';
 import 'providers/app_state_provider.dart';
@@ -19,6 +20,11 @@ import 'screens/settings/app_settings_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Use legacy renderer on Android — prevents Vulkan crash on emulators
+  // and older devices that don't support the new Maps renderer
+  AndroidGoogleMapsFlutter.useAndroidViewSurface = false;
+
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   final appState = AppStateProvider();

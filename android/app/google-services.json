@@ -23,6 +23,14 @@
           }
         },
         {
+          "client_id": "621029142110-86uv7gnvuveod2i1eji09pef4pjh65hk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mycompany.captainridecalc",
+            "certificate_hash": "7a2d0caaf2f533317b61d4bbbda881137c352d14"
+          }
+        },
+        {
           "client_id": "621029142110-avks8ermltl9i1p5ejr1t0qjp3d00ee2.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

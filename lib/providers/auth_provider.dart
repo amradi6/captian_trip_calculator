@@ -7,7 +7,11 @@ import '../models/models.dart';
 class AuthProvider extends ChangeNotifier {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _db = FirebaseFirestore.instance;
-  final GoogleSignIn _googleSignIn = GoogleSignIn();
+  // serverClientId = the web OAuth client (type 3) from google-services.json
+  // This is required for Google Sign-In to work on Android
+  final GoogleSignIn _googleSignIn = GoogleSignIn(
+    serverClientId: '621029142110-n2u7lfug37n97o1ppn1thrnibi2t2c2g.apps.googleusercontent.com',
+  );
 
   User? get firebaseUser => _auth.currentUser;
   bool get isLoggedIn => firebaseUser != null;
@@ -119,6 +123,13 @@ class AuthProvider extends ChangeNotifier {
       return true;
     } on FirebaseAuthException catch (e) {
       _error = _authMessage(e.code);
+      _loading = false;
+      notifyListeners();
+      return false;
+    } catch (e) {
+      _error = e.toString().contains('network')
+          ? 'Network error. Check your connection.'
+          : 'Google Sign-In failed. Try again.';
       _loading = false;
       notifyListeners();
       return false;
