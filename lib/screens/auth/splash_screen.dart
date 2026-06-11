@@ -117,6 +117,11 @@ class _SplashScreenState extends State<SplashScreen>
                 ),
               ),
               const SizedBox(height: 14),
+              Text(
+                ' جميع الحقوق محفوظة لمؤسسة قوة الكباتن 2026',
+                style: Theme.of(context).textTheme.bodyMedium,
+              ),
+              const SizedBox(height: 14),
               Text('Preparing your dashboard...',
                 style: Theme.of(context).textTheme.bodySmall,
               ),

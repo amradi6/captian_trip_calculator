@@ -67,20 +67,33 @@ class TripProvider extends ChangeNotifier {
     if (_uid == null) return null;
     try {
       final ref = await _db.collection('trips').add(trip.toMap());
+      // Reconstruct with the new Firestore doc ID
       final saved = TripModel(
         id: ref.id,
-        pickupAddress: trip.pickupAddress,
+        pickupAddress:      trip.pickupAddress,
+        pickupLat:          trip.pickupLat,
+        pickupLng:          trip.pickupLng,
         destinationAddress: trip.destinationAddress,
-        distanceKm: trip.distanceKm,
-        durationMins: trip.durationMins,
-        waitingMins: trip.waitingMins,
-        fareAmount: trip.fareAmount,
-        baseFare: trip.baseFare,
-        distanceFare: trip.distanceFare,
-        timeFare: trip.timeFare,
-        dateTime: trip.dateTime,
-        status: trip.status,
-        userId: trip.userId,
+        destinationLat:     trip.destinationLat,
+        destinationLng:     trip.destinationLng,
+        distanceKm:         trip.distanceKm,
+        durationMins:       trip.durationMins,
+        waitingMins:        trip.waitingMins,
+        pricePerKm:         trip.pricePerKm,
+        pricePerMin:        trip.pricePerMin,
+        waitingRatePerMin:  trip.waitingRatePerMin,
+        doorOpeningFee:     trip.doorOpeningFee,
+        tip:                trip.tip,
+        parkingFee:         trip.parkingFee,
+        distanceFare:       trip.distanceFare,
+        timeFare:           trip.timeFare,
+        waitingFare:        trip.waitingFare,
+        fareAmount:         trip.fareAmount,
+        platform:           trip.platform,
+        currency:           trip.currency,
+        dateTime:           trip.dateTime,
+        status:             trip.status,
+        userId:             trip.userId,
       );
       _trips.insert(0, saved);
       notifyListeners();
