@@ -51,100 +51,151 @@ class _SplashScreenState extends State<SplashScreen>
     final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
       backgroundColor: isDark ? AppColors.primaryBackgroundDark : AppColors.primaryBackground,
-      body: FadeTransition(
-        opacity: _fade,
-        child: Center(
+      body: SafeArea(
+        child: FadeTransition(
+          opacity: _fade,
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              ScaleTransition(
-                scale: _scale,
-                child: Stack(
-                  alignment: Alignment.center,
+              // ── Logo + titles ─────────────────────────────────────────
+              Expanded(
+                flex: 5,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Container(
-                      width: 110,
-                      height: 110,
-                      decoration: BoxDecoration(
-                        color: AppColors.primary.withOpacity(0.15),
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                    ),
-                    Container(
-                      width: 88,
-                      height: 88,
-                      decoration: BoxDecoration(
-                        color: AppColors.primary,
-                        borderRadius: BorderRadius.circular(22),
-                        boxShadow: [
-                          BoxShadow(
-                            color: AppColors.primary.withOpacity(0.4),
-                            blurRadius: 32,
-                            offset: const Offset(0, 12),
+                    ScaleTransition(
+                      scale: _scale,
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          Container(
+                            width: 110,
+                            height: 110,
+                            decoration: BoxDecoration(
+                              color: AppColors.primary.withOpacity(0.15),
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                          ),
+                          Container(
+                            width: 88,
+                            height: 88,
+                            decoration: BoxDecoration(
+                              color: AppColors.primary,
+                              borderRadius: BorderRadius.circular(22),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: AppColors.primary.withOpacity(0.4),
+                                  blurRadius: 32,
+                                  offset: const Offset(0, 12),
+                                ),
+                              ],
+                            ),
+                            child: const Icon(
+                              Icons.directions_car_rounded,
+                              size: 46,
+                              color: Colors.white,
+                            ),
                           ),
                         ],
                       ),
-                      child: const Icon(
-                        Icons.directions_car_rounded,
-                        size: 46,
-                        color: Colors.white,
-                      ),
+                    ),
+                    const SizedBox(height: 32),
+                    Text(
+                      'Captain',
+                      style: Theme.of(context).textTheme.headlineMedium,
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      'Trip Calculator',
+                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                            color: cs.secondary,
+                          ),
+                    ),
+                    const SizedBox(height: 6),
+                    Text(
+                      'كابتن - حاسبة الرحلة',
+                      style: Theme.of(context).textTheme.bodySmall,
                     ),
                   ],
                 ),
               ),
-              const SizedBox(height: 32),
-              Text('Captain',
-                style: Theme.of(context).textTheme.headlineMedium,
-              ),
-              const SizedBox(height: 4),
-              Text('Trip Calculator',
-                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                  color: cs.secondary,
-                ),
-              ),
-              const SizedBox(height: 6),
-              Text('كابتن • حاسبة الرحلة',
-                style: Theme.of(context).textTheme.bodySmall,
-              ),
-              const SizedBox(height: 64),
-              SizedBox(
-                width: 28,
-                height: 28,
-                child: CircularProgressIndicator(
-                  strokeWidth: 2.5,
-                  color: cs.primary,
+
+              // ── Divider ───────────────────────────────────────────────
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 32),
+                child: Divider(
+                  height: 1,
+                  thickness: 0.8,
+                  color: isDark ? AppColors.dividerDark : AppColors.divider,
                 ),
               ),
               const SizedBox(height: 14),
-              Text(
-                ' جميع الحقوق محفوظة لمؤسسة قوة الكباتن 2026',
-                style: Theme.of(context).textTheme.bodyMedium,
+
+              // ── Copyright ─────────────────────────────────────────────
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24),
+                child: Text(
+                  'جميع الحقوق محفوظة لمؤسسة قوة الكباتن 2026',
+                  textAlign: TextAlign.center,
+                  textDirection: TextDirection.rtl,
+                  style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                        color: isDark
+                            ? AppColors.secondaryTextDark
+                            : AppColors.secondaryText,
+                      ),
+                ),
               ),
-              const SizedBox(height: 14),
-              Text('Preparing your dashboard...',
-                style: Theme.of(context).textTheme.bodySmall,
+
+              // ── Loading + status ──────────────────────────────────────
+              Expanded(
+                flex: 3,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    SizedBox(
+                      width: 28,
+                      height: 28,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2.5,
+                        color: cs.primary,
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    Text(
+                      'Preparing your dashboard...',
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
+                    const SizedBox(height: 20),
+                  ],
+                ),
               ),
-              const SizedBox(height: 6),
+
+              // ── Footer ────────────────────────────────────────────────
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Icon(Icons.local_fire_department_rounded,
-                    size: 13, color: AppColors.tertiary),
+                  const Icon(
+                    Icons.local_fire_department_rounded,
+                    size: 13,
+                    color: AppColors.tertiary,
+                  ),
                   const SizedBox(width: 4),
-                  Text('Powered by Firebase',
+                  Text(
+                    'Powered by Firebase',
                     style: Theme.of(context).textTheme.labelSmall,
                   ),
                   const SizedBox(width: 12),
-                  Text('English',
+                  Text(
+                    'English',
                     style: Theme.of(context).textTheme.labelSmall,
                   ),
                   const SizedBox(width: 4),
-                  Text('العربية',
+                  Text(
+                    'العربية',
                     style: Theme.of(context).textTheme.labelSmall,
                   ),
                 ],
               ),
+              const SizedBox(height: 20),
             ],
           ),
         ),
