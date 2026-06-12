@@ -13,7 +13,21 @@ class TripProvider extends ChangeNotifier {
   bool _loading = false;
   bool get loading => _loading;
 
+  String? _error;
+  String? get error => _error;
+
   String? get _uid => _auth.currentUser?.uid;
+
+  TripProvider() {
+    _auth.authStateChanges().listen((user) {
+      if (user != null) {
+        loadTrips();
+      } else {
+        _trips = [];
+        notifyListeners();
+      }
+    });
+  }
 
   // Earnings summaries
   double get todayEarnings {
@@ -49,6 +63,7 @@ class TripProvider extends ChangeNotifier {
   Future<void> loadTrips() async {
     if (_uid == null) return;
     _loading = true;
+    _error = null;
     notifyListeners();
     try {
       final snap = await _db
@@ -58,7 +73,10 @@ class TripProvider extends ChangeNotifier {
         .limit(100)
         .get();
       _trips = snap.docs.map(TripModel.fromDoc).toList();
-    } catch (_) {}
+    } catch (e) {
+      _error = e.toString();
+      debugPrint('TripProvider.loadTrips error: $e');
+    }
     _loading = false;
     notifyListeners();
   }

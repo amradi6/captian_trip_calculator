@@ -161,6 +161,16 @@ class DashboardScreen extends StatelessWidget {
                 const SizedBox(height: 12),
                 if (trips.loading)
                   const Center(child: CircularProgressIndicator())
+                else if (trips.error != null)
+                  Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(24),
+                      child: Text(
+                        'Error loading trips: ${trips.error}',
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.red),
+                      ),
+                    ),
+                  )
                 else if (trips.trips.isEmpty)
                   Center(
                     child: Padding(
