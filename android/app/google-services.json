@@ -39,6 +39,14 @@
           }
         },
         {
+          "client_id": "621029142110-k7nn1o0q12go2c3sat5fqoqar56j71an.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mycompany.captainridecalc",
+            "certificate_hash": "79121f4ac3d1b25237e513a58b7e5fa5ea9c5944"
+          }
+        },
+        {
           "client_id": "621029142110-n2u7lfug37n97o1ppn1thrnibi2t2c2g.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -74,6 +82,14 @@
         }
       },
       "oauth_client": [
+        {
+          "client_id": "621029142110-5hetco5l07khdomejhir5dcbb49j11lm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mycompany.captaintripcalculator",
+            "certificate_hash": "79121f4ac3d1b25237e513a58b7e5fa5ea9c5944"
+          }
+        },
         {
           "client_id": "621029142110-6bikcrj9dp02eppkn3fnc0fg8ug40sks.apps.googleusercontent.com",
           "client_type": 1,

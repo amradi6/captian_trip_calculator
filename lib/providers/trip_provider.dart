@@ -13,7 +13,22 @@ class TripProvider extends ChangeNotifier {
   bool _loading = false;
   bool get loading => _loading;
 
+  String? _error;
+  String? get error => _error;
+
   String? get _uid => _auth.currentUser?.uid;
+
+  TripProvider() {
+    _auth.authStateChanges().listen((user) {
+      if (user != null) {
+        loadTrips();
+        _error=null;
+      } else {
+        _trips = [];
+        notifyListeners();
+      }
+    });
+  }
 
   // Earnings summaries
   double get todayEarnings {
@@ -54,11 +69,13 @@ class TripProvider extends ChangeNotifier {
       final snap = await _db
         .collection('trips')
         .where('userId', isEqualTo: _uid)
-        .orderBy('createdAt', descending: true)
         .limit(100)
         .get();
       _trips = snap.docs.map(TripModel.fromDoc).toList();
-    } catch (_) {}
+      _trips.sort((a, b) => b.dateTime.compareTo(a.dateTime));
+    } catch (e) {
+      _error = e.toString();
+    }
     _loading = false;
     notifyListeners();
   }
