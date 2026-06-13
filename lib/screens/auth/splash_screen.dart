@@ -19,7 +19,8 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   void initState() {
     super.initState();
-    _ctrl = AnimationController(vsync: this, duration: const Duration(milliseconds: 900));
+    _ctrl = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 900));
     _fade = CurvedAnimation(parent: _ctrl, curve: Curves.easeIn);
     _scale = Tween(begin: 0.85, end: 1.0).animate(
       CurvedAnimation(parent: _ctrl, curve: Curves.easeOutBack),
@@ -50,7 +51,9 @@ class _SplashScreenState extends State<SplashScreen>
     final cs = Theme.of(context).colorScheme;
     final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
-      backgroundColor: isDark ? AppColors.primaryBackgroundDark : AppColors.primaryBackground,
+      backgroundColor: isDark
+          ? AppColors.primaryBackgroundDark
+          : AppColors.primaryBackground,
       body: SafeArea(
         child: FadeTransition(
           opacity: _fade,
@@ -118,23 +121,16 @@ class _SplashScreenState extends State<SplashScreen>
                   ],
                 ),
               ),
-
-              const SizedBox(height: 14),
-
-              // ── Copyright ─────────────────────────────────────────────
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24),
-                child: Text(
-                  'جميع الحقوق محفوظة لمؤسسة قوة الكباتن 2026',
-                  textAlign: TextAlign.center,
-                  textDirection: TextDirection.rtl,
-                  style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                        color: isDark
-                            ? AppColors.secondaryTextDark
-                            : AppColors.secondaryText,
-                      ),
+              const SizedBox(height: 24),
+              SizedBox(
+                width: 28,
+                height: 28,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2.5,
+                  color: cs.primary,
                 ),
               ),
+              const SizedBox(height: 24),
 
               // ── Loading + status ──────────────────────────────────────
               Expanded(
@@ -142,18 +138,25 @@ class _SplashScreenState extends State<SplashScreen>
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    SizedBox(
-                      width: 28,
-                      height: 28,
-                      child: CircularProgressIndicator(
-                        strokeWidth: 2.5,
-                        color: cs.primary,
-                      ),
-                    ),
                     const SizedBox(height: 12),
                     Text(
                       'Preparing your dashboard...',
                       style: Theme.of(context).textTheme.bodySmall,
+                    ),
+                    const SizedBox(height: 20),
+                    // ── Copyright ─────────────────────────────────────────────
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 24),
+                      child: Text(
+                        'جميع الحقوق محفوظة لمؤسسة قوة الكباتن 2026',
+                        textAlign: TextAlign.center,
+                        textDirection: TextDirection.rtl,
+                        style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                              color: isDark
+                                  ? AppColors.secondaryTextDark
+                                  : AppColors.secondaryText,
+                            ),
+                      ),
                     ),
                     const SizedBox(height: 20),
                   ],
