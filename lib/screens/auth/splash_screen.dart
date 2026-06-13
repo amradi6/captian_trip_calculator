@@ -113,21 +113,12 @@ class _SplashScreenState extends State<SplashScreen>
                     const SizedBox(height: 6),
                     Text(
                       'كابتن - حاسبة الرحلة',
-                      style: Theme.of(context).textTheme.bodySmall,
+                      style: Theme.of(context).textTheme.headlineMedium,
                     ),
                   ],
                 ),
               ),
 
-              // ── Divider ───────────────────────────────────────────────
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 32),
-                child: Divider(
-                  height: 1,
-                  thickness: 0.8,
-                  color: isDark ? AppColors.dividerDark : AppColors.divider,
-                ),
-              ),
               const SizedBox(height: 14),
 
               // ── Copyright ─────────────────────────────────────────────

@@ -186,6 +186,17 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
               ),
+              const SizedBox(height: 8),
+              Center(
+                child: Text(
+                  'جميع الحقوق محفوظة لمؤسسة قوة الكباتن 2026',
+                  textAlign: TextAlign.center,
+                  textDirection: TextDirection.rtl,
+                  style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                    color: AppColors.secondaryText,
+                  ),
+                ),
+              ),
             ],
           ),
         ),

@@ -7,6 +7,17 @@ import '../../utils/app_colors.dart';
 import '../../utils/l10n.dart';
 import '../../widgets/shared_widgets.dart';
 
+// List<String> _buildWeekLabels(String language) {
+//   const en = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+//   const ar = ['الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت', 'الأحد'];
+//   final names = language == 'ar' ? ar : en;
+//   final now = DateTime.now();
+//   return List.generate(7, (i) {
+//     final day = now.subtract(Duration(days: 6 - i));
+//     return names[day.weekday - 1]; // weekday: 1=Mon … 7=Sun
+//   });
+// }
+
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({super.key});
 
@@ -18,9 +29,9 @@ class DashboardScreen extends StatelessWidget {
     final l = L10n(appState.language);
     final cs = Theme.of(context).colorScheme;
 
-    final name = auth.userModel?.displayName
-      ?? auth.firebaseUser?.displayName
-      ?? (appState.isAr ? 'كابتن' : 'Captain');
+    final name = auth.userModel?.displayName ??
+        auth.firebaseUser?.displayName ??
+        (appState.isAr ? 'كابتن' : 'Captain');
     final currency = appState.currency;
     final totalStr = trips.monthEarnings.toStringAsFixed(2);
     final todayStr = trips.todayEarnings.toStringAsFixed(2);
@@ -42,13 +53,18 @@ class DashboardScreen extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(l.goodMorning,
-                            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              color: cs.secondary,
-                            ),
+                          Text(
+                            l.goodMorning,
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.copyWith(
+                                  color: cs.secondary,
+                                ),
                           ),
                           const SizedBox(height: 2),
-                          Text(name,
+                          Text(
+                            name,
                             style: Theme.of(context).textTheme.headlineSmall,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
@@ -66,17 +82,17 @@ class DashboardScreen extends StatelessWidget {
                       radius: 22,
                       backgroundColor: AppColors.primary.withOpacity(0.15),
                       backgroundImage: auth.firebaseUser?.photoURL != null
-                        ? NetworkImage(auth.firebaseUser!.photoURL!)
-                        : null,
+                          ? NetworkImage(auth.firebaseUser!.photoURL!)
+                          : null,
                       child: auth.firebaseUser?.photoURL == null
-                        ? Text(
-                            name.isNotEmpty ? name[0].toUpperCase() : 'C',
-                            style: const TextStyle(
-                              color: AppColors.primary,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          )
-                        : null,
+                          ? Text(
+                              name.isNotEmpty ? name[0].toUpperCase() : 'C',
+                              style: const TextStyle(
+                                color: AppColors.primary,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            )
+                          : null,
                     ),
                   ],
                 ),
@@ -120,7 +136,8 @@ class DashboardScreen extends StatelessWidget {
                 // Total earnings row
                 Row(
                   children: [
-                    Text('${l.totalEarnings}: ', style: Theme.of(context).textTheme.bodyMedium),
+                    Text('${l.totalEarnings}: ',
+                        style: Theme.of(context).textTheme.bodyMedium),
                     Text(
                       '$totalStr $currency',
                       style: TextStyle(
@@ -149,7 +166,7 @@ class DashboardScreen extends StatelessWidget {
                   ),
                   child: WeeklyEarningsChart(
                     data: trips.weeklyData,
-                    labels: l.weekDays,
+                    labels: l.weekDays, //_buildWeekLabels(appState.language),
                   ),
                 ),
                 const SizedBox(height: 20),
@@ -165,27 +182,31 @@ class DashboardScreen extends StatelessWidget {
                   Center(
                     child: Padding(
                       padding: const EdgeInsets.all(24),
-                      child: Text(l.noTrips,
+                      child: Text(
+                        l.noTrips,
                         style: Theme.of(context).textTheme.bodyMedium,
                       ),
                     ),
                   )
                 else
                   ...trips.trips.take(3).map((t) => Padding(
-                    padding: const EdgeInsets.only(bottom: 10),
-                    child: TripListTile(
-                      pickup: t.pickupAddress,
-                      destination: t.destinationAddress,
-                      distanceKm: t.distanceKm.toStringAsFixed(1),
-                      durationMins: t.durationMins.toString(),
-                      fare: '${t.fareAmount.toStringAsFixed(2)} $currency',
-                      status: t.status,
-                      dateLabel: t.dateTime.length >= 10 ? t.dateTime.substring(0, 10) : t.dateTime,
-                      onTap: () => Navigator.of(context).pushNamed(
-                        '/trip-details', arguments: t.id,
-                      ),
-                    ),
-                  )),
+                        padding: const EdgeInsets.only(bottom: 10),
+                        child: TripListTile(
+                          pickup: t.pickupAddress,
+                          destination: t.destinationAddress,
+                          distanceKm: t.distanceKm.toStringAsFixed(1),
+                          durationMins: t.durationMins.toString(),
+                          fare: '${t.fareAmount.toStringAsFixed(2)} $currency',
+                          status: t.status,
+                          dateLabel: t.dateTime.length >= 10
+                              ? t.dateTime.substring(0, 10)
+                              : t.dateTime,
+                          onTap: () => Navigator.of(context).pushNamed(
+                            '/trip-details',
+                            arguments: t.id,
+                          ),
+                        ),
+                      )),
                 const SizedBox(height: 24),
                 // CTA
                 ElevatedButton.icon(
@@ -197,7 +218,8 @@ class DashboardScreen extends StatelessWidget {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.primary,
                     minimumSize: const Size(double.infinity, 52),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12)),
                   ),
                 ),
               ],
