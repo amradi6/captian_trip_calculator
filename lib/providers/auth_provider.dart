@@ -136,6 +136,33 @@ class AuthProvider extends ChangeNotifier {
     }
   }
 
+  Future<bool> updateProfile({
+    required String displayName,
+    required String phoneNumber,
+  }) async {
+    _loading = true;
+    _error = null;
+    notifyListeners();
+    try {
+      final uid = _auth.currentUser?.uid;
+      if (uid == null) throw Exception('Not logged in');
+      await _auth.currentUser?.updateDisplayName(displayName);
+      await _db.collection('users').doc(uid).update({
+        'display_name': displayName,
+        'phone_number': phoneNumber,
+      });
+      await _loadUserModel(uid);
+      _loading = false;
+      notifyListeners();
+      return true;
+    } catch (e) {
+      _error = 'Failed to update profile. Try again.';
+      _loading = false;
+      notifyListeners();
+      return false;
+    }
+  }
+
   Future<bool> sendPasswordReset(String email) async {
     _loading = true;
     _error = null;

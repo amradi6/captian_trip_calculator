@@ -270,6 +270,8 @@ class CaptainProfileScreen extends StatelessWidget {
         onTap: () {
           if (title.contains('Settings') || title.contains('إعدادات')) {
             Navigator.of(context).pushNamed('/settings');
+          } else if (title.contains('Personal') || title.contains('الشخصية')) {
+            Navigator.of(context).pushNamed('/personal-info');
           }
         },
       ),

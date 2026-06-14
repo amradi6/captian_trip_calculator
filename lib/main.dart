@@ -17,6 +17,7 @@ import 'screens/auth/forgot_password_screen.dart';
 import 'screens/dashboard/main_scaffold.dart';
 import 'screens/trip_details/trip_details_screen.dart';
 import 'screens/settings/app_settings_screen.dart';
+import 'screens/profile/personal_info_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -88,6 +89,8 @@ class CaptainApp extends StatelessWidget {
             );
           case '/settings':
             return MaterialPageRoute(builder: (_) => const AppSettingsScreen());
+          case '/personal-info':
+            return MaterialPageRoute(builder: (_) => const PersonalInfoScreen());
           default:
             return MaterialPageRoute(builder: (_) => const SplashScreen());
         }
