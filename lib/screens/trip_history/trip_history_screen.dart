@@ -26,11 +26,22 @@ class _TripHistoryScreenState extends State<TripHistoryScreen> {
 
   List<TripModel> _filtered(List<TripModel> all, L10n l) {
     var list = all;
-    // filter tab
-    if (_filterIndex == 1) list = list.where((t) => t.status == 'completed').toList();
-    if (_filterIndex == 2) list = list.where((t) => t.status == 'cancelled').toList();
-    if (_filterIndex == 3) {
-      final now = DateTime.now();
+    final now = DateTime.now();
+    if (_filterIndex == 1) {
+      list = list.where((t) {
+        try {
+          final d = DateTime.parse(t.dateTime);
+          return d.year == now.year && d.month == now.month && d.day == now.day;
+        } catch (_) { return false; }
+      }).toList();
+    } else if (_filterIndex == 2) {
+      list = list.where((t) {
+        try {
+          final d = DateTime.parse(t.dateTime);
+          return d.year == now.year && d.month == now.month;
+        } catch (_) { return false; }
+      }).toList();
+    } else if (_filterIndex == 3) {
       list = list.where((t) {
         try {
           final d = DateTime.parse(t.dateTime);
@@ -87,7 +98,7 @@ class _TripHistoryScreenState extends State<TripHistoryScreen> {
                   const SizedBox(height: 14),
                   // Filter chips
                   FilterChipRow(
-                    labels: [l.all, l.completed, l.cancelled, l.thisWeek],
+                    labels: [l.all, l.thisDay, l.thisMonth, l.thisWeek],
                     selected: _filterIndex,
                     onSelected: (i) => setState(() => _filterIndex = i),
                   ),

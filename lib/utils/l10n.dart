@@ -136,9 +136,9 @@ class L10n {
 
   String get all => isAr ? 'الكل' : 'All';
 
-  String get completed => isAr ? 'المكتملة' : 'Completed';
+  String get thisDay => isAr ? 'هذا اليوم' : 'this Day';
 
-  String get cancelled => isAr ? 'الملغاة' : 'Cancelled';
+  String get thisMonth => isAr ? 'هذا الشهر' : 'This Month';
 
   String get thisWeek => isAr ? 'هذا الأسبوع' : 'This Week';
 

@@ -94,7 +94,8 @@ class StatCard extends StatelessWidget {
           const SizedBox(height: 6),
           Text(
             label,
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 11),
+            style:
+                Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 11),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
@@ -165,9 +166,11 @@ class TripListTile extends StatelessWidget {
                 ),
                 const Spacer(),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                   decoration: BoxDecoration(
-                    color: (isCompleted ? AppColors.success : AppColors.error).withOpacity(0.12),
+                    color: (isCompleted ? AppColors.success : AppColors.error)
+                        .withOpacity(0.12),
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Text(
@@ -182,7 +185,8 @@ class TripListTile extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 10),
-            _routeRow(context, Icons.circle_outlined, AppColors.primary, pickup),
+            _routeRow(
+                context, Icons.circle_outlined, AppColors.primary, pickup),
             const SizedBox(height: 6),
             _routeRow(context, Icons.location_on, AppColors.error, destination),
             const SizedBox(height: 10),
@@ -190,16 +194,20 @@ class TripListTile extends StatelessWidget {
               children: [
                 Icon(Icons.route_outlined, size: 14, color: cs.secondary),
                 const SizedBox(width: 4),
-                Text('$distanceKm km', style: Theme.of(context).textTheme.bodySmall),
+                Text('$distanceKm km',
+                    style: Theme.of(context).textTheme.bodySmall),
                 const SizedBox(width: 12),
                 Icon(Icons.access_time_outlined, size: 14, color: cs.secondary),
                 const SizedBox(width: 4),
-                Text('$durationMins min', style: Theme.of(context).textTheme.bodySmall),
+                Text('$durationMins min',
+                    style: Theme.of(context).textTheme.bodySmall),
                 const Spacer(),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                   decoration: BoxDecoration(
-                    color: (isCompleted ? AppColors.success : AppColors.error).withOpacity(0.12),
+                    color: (isCompleted ? AppColors.success : AppColors.error)
+                        .withOpacity(0.12),
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Text(
@@ -218,7 +226,8 @@ class TripListTile extends StatelessWidget {
     );
   }
 
-  Widget _routeRow(BuildContext context, IconData icon, Color color, String text) {
+  Widget _routeRow(
+      BuildContext context, IconData icon, Color color, String text) {
     return Row(
       children: [
         Icon(icon, size: 14, color: color),
@@ -227,8 +236,8 @@ class TripListTile extends StatelessWidget {
           child: Text(
             text,
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
-              color: Theme.of(context).colorScheme.onSurface,
-            ),
+                  color: Theme.of(context).colorScheme.onSurface,
+                ),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
@@ -270,7 +279,8 @@ class EarningsBanner extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(label,
+                Text(
+                  label,
                   style: const TextStyle(
                     color: Colors.white,
                     fontSize: 13,
@@ -278,7 +288,8 @@ class EarningsBanner extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 6),
-                Text('\$$amount',
+                Text(
+                  '$currency $amount',
                   style: const TextStyle(
                     color: Colors.white,
                     fontSize: 28,
@@ -295,7 +306,8 @@ class EarningsBanner extends StatelessWidget {
               color: Colors.white.withOpacity(0.2),
               borderRadius: BorderRadius.circular(12),
             ),
-            child: const Icon(Icons.bar_chart_rounded, color: Colors.white, size: 24),
+            child: const Icon(Icons.bar_chart_rounded,
+                color: Colors.white, size: 24),
           ),
         ],
       ),
@@ -391,7 +403,10 @@ class WeeklyEarningsChart extends StatelessWidget {
                   const SizedBox(height: 4),
                   Text(
                     labels[i],
-                    style: Theme.of(context).textTheme.labelSmall?.copyWith(fontSize: 9),
+                    style: Theme.of(context)
+                        .textTheme
+                        .labelSmall
+                        ?.copyWith(fontSize: 9),
                   ),
                 ],
               ),
@@ -430,7 +445,8 @@ class FilterChipRow extends StatelessWidget {
               onTap: () => onSelected(i),
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 200),
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 decoration: BoxDecoration(
                   color: active ? cs.primary : Colors.transparent,
                   borderRadius: BorderRadius.circular(20),
@@ -482,16 +498,19 @@ class FareInputField extends StatelessWidget {
               child: TextField(
                 controller: controller,
                 onChanged: onChanged,
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                keyboardType:
+                    const TextInputType.numberWithOptions(decimal: true),
                 style: Theme.of(context).textTheme.titleSmall,
                 decoration: const InputDecoration(
-                  contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                  contentPadding:
+                      EdgeInsets.symmetric(horizontal: 12, vertical: 10),
                   isDense: true,
                 ),
               ),
             ),
             const SizedBox(width: 6),
-            Text(unit,
+            Text(
+              unit,
               style: TextStyle(
                 fontSize: 11,
                 fontWeight: FontWeight.w600,
@@ -548,12 +567,13 @@ class PrimaryButton extends StatelessWidget {
       child: ElevatedButton(
         onPressed: loading ? null : onPressed,
         child: loading
-          ? const SizedBox(
-              width: 22,
-              height: 22,
-              child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
-            )
-          : Text(label),
+            ? const SizedBox(
+                width: 22,
+                height: 22,
+                child: CircularProgressIndicator(
+                    color: Colors.white, strokeWidth: 2),
+              )
+            : Text(label),
       ),
     );
   }
