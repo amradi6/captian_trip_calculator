@@ -35,11 +35,11 @@ class CaptainProfileScreen extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      IconButton(
-                        icon: const Icon(Icons.arrow_back_ios_new_rounded,
-                          color: Colors.white, size: 18),
-                        onPressed: () {},
-                      ),
+                      // IconButton(
+                      //   icon: const Icon(Icons.arrow_back_ios_new_rounded,
+                      //     color: Colors.white, size: 18),
+                      //   onPressed: () {},
+                      // ),
                       Expanded(
                         child: Text(l.captainProfile,
                           textAlign: TextAlign.center,
@@ -50,13 +50,13 @@ class CaptainProfileScreen extends StatelessWidget {
                           ),
                         ),
                       ),
-                      IconButton(
-                        icon: const Icon(Icons.edit_outlined,
-                          color: Colors.white, size: 18),
-                        onPressed: () {},
-                      ),
-                    ],
-                  ),
+                  //     IconButton(
+                  //       icon: const Icon(Icons.edit_outlined,
+                  //         color: Colors.white, size: 18),
+                  //       onPressed: () {},
+                  //     ),
+                     ],
+                   ),
                   const SizedBox(height: 16),
                   CircleAvatar(
                     radius: 44,

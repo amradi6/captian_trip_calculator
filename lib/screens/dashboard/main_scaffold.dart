@@ -31,9 +31,9 @@ class _MainScaffoldState extends State<MainScaffold> {
     final appState = context.watch<AppStateProvider>();
     final l = L10n(appState.language);
 
-    final screens = const [
-      DashboardScreen(),
-      TripCalculatorScreen(),
+    final screens = [
+      DashboardScreen(onNavigateToCalculator: () => setState(() => _currentIndex = 1)),
+      const TripCalculatorScreen(),
       TripHistoryScreen(),
       CaptainProfileScreen(),
     ];

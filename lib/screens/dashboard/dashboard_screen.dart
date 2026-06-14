@@ -7,19 +7,9 @@ import '../../utils/app_colors.dart';
 import '../../utils/l10n.dart';
 import '../../widgets/shared_widgets.dart';
 
-// List<String> _buildWeekLabels(String language) {
-//   const en = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-//   const ar = ['الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت', 'الأحد'];
-//   final names = language == 'ar' ? ar : en;
-//   final now = DateTime.now();
-//   return List.generate(7, (i) {
-//     final day = now.subtract(Duration(days: 6 - i));
-//     return names[day.weekday - 1]; // weekday: 1=Mon … 7=Sun
-//   });
-// }
-
 class DashboardScreen extends StatelessWidget {
-  const DashboardScreen({super.key});
+  final VoidCallback? onNavigateToCalculator;
+  const DashboardScreen({super.key, this.onNavigateToCalculator});
 
   @override
   Widget build(BuildContext context) {
@@ -210,9 +200,7 @@ class DashboardScreen extends StatelessWidget {
                 const SizedBox(height: 24),
                 // CTA
                 ElevatedButton.icon(
-                  onPressed: () {
-                    // switch to calculator tab via parent
-                  },
+                  onPressed: onNavigateToCalculator,
                   icon: const Icon(Icons.add),
                   label: Text(l.startNewTrip),
                   style: ElevatedButton.styleFrom(
