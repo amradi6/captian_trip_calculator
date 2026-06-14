@@ -144,6 +144,41 @@ class _TripCalculatorScreenState extends State<TripCalculatorScreen> {
     if (mounted) setState(() => _geocoding = false);
   }
 
+  // ── Handle map tap → set destination ─────────────────────
+  Future<void> _onMapTap(LatLng latLng) async {
+    setState(() {
+      _destLatLng = latLng;
+      _geocoding = true;
+    });
+    try {
+      final marks = await geo.placemarkFromCoordinates(
+          latLng.latitude, latLng.longitude);
+      if (marks.isNotEmpty && mounted) {
+        final p = marks.first;
+        final addr = [p.street, p.subLocality, p.locality]
+            .where((s) => s != null && s.isNotEmpty)
+            .join(', ');
+        final display = addr.isNotEmpty ? addr : '${latLng.latitude.toStringAsFixed(5)}, ${latLng.longitude.toStringAsFixed(5)}';
+        setState(() {
+          _destAddress = display;
+          _destCtrl.text = display;
+        });
+      }
+    } catch (_) {
+      if (mounted) {
+        setState(() {
+          _destAddress = '${latLng.latitude.toStringAsFixed(5)}, ${latLng.longitude.toStringAsFixed(5)}';
+          _destCtrl.text = _destAddress;
+        });
+      }
+    }
+    if (mounted) {
+      setState(() => _geocoding = false);
+      _fitMapBounds();
+      _updateDistanceFromCoords();
+    }
+  }
+
   // ── Calculate straight-line distance (Haversine) ─────────
   void _updateDistanceFromCoords() {
     if (_pickupLatLng == null || _destLatLng == null) return;
@@ -317,6 +352,7 @@ class _TripCalculatorScreenState extends State<TripCalculatorScreen> {
           _mapCtrl = c;
           if (_pickupLatLng != null && _destLatLng != null) _fitMapBounds();
         },
+        onTap: _onMapTap,
         myLocationEnabled: true,
         myLocationButtonEnabled: false,
         zoomControlsEnabled: false,
@@ -409,6 +445,33 @@ class _TripCalculatorScreenState extends State<TripCalculatorScreen> {
                     ),
                   ),
                 ),
+                // Tap-to-set-destination hint
+                if (_destLatLng == null)
+                  Positioned(
+                    bottom: 10, left: 10,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                      decoration: BoxDecoration(
+                        color: Colors.black54,
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Icon(Icons.touch_app_rounded,
+                              size: 14, color: Colors.white),
+                          const SizedBox(width: 5),
+                          Text(
+                            context.read<AppStateProvider>().isAr
+                                ? 'اضغط لتحديد الوجهة'
+                                : 'Tap map to set destination',
+                            style: const TextStyle(
+                                color: Colors.white, fontSize: 11),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                 // My-location button
                 Positioned(
                   bottom: 10, right: 10,

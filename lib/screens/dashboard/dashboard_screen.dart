@@ -7,6 +7,17 @@ import '../../utils/app_colors.dart';
 import '../../utils/l10n.dart';
 import '../../widgets/shared_widgets.dart';
 
+List<String> _buildWeekLabels(String language) {
+  const en = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+  const ar = ['الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت', 'الأحد'];
+  final names = language == 'ar' ? ar : en;
+  final now = DateTime.now();
+  return List.generate(7, (i) {
+    final day = now.subtract(Duration(days: 6 - i));
+    return names[day.weekday - 1];
+  });
+}
+
 class DashboardScreen extends StatelessWidget {
   final VoidCallback? onNavigateToCalculator;
   const DashboardScreen({super.key, this.onNavigateToCalculator});
@@ -156,7 +167,7 @@ class DashboardScreen extends StatelessWidget {
                   ),
                   child: WeeklyEarningsChart(
                     data: trips.weeklyData,
-                    labels: l.weekDays, //_buildWeekLabels(appState.language),
+                    labels: _buildWeekLabels(appState.language),
                   ),
                 ),
                 const SizedBox(height: 20),
