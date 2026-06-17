@@ -115,7 +115,7 @@ class _SplashScreenState extends State<SplashScreen>
                     ),
                     const SizedBox(height: 6),
                     Text(
-                      'كابتن - حاسبة الرحلة',
+                      'حاسبة الرحلات',
                       style: Theme.of(context).textTheme.headlineMedium,
                     ),
                   ],
