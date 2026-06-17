@@ -11,6 +11,7 @@ import '../../models/models.dart';
 import '../../utils/app_colors.dart';
 import '../../utils/l10n.dart';
 import '../../widgets/shared_widgets.dart';
+import '../location_picker/location_picker_screen.dart';
 
 class TripCalculatorScreen extends StatefulWidget {
   const TripCalculatorScreen({super.key});
@@ -125,23 +126,52 @@ class _TripCalculatorScreenState extends State<TripCalculatorScreen> {
     if (mounted) setState(() => _locating = false);
   }
 
-  // ── Geocode destination text → LatLng ────────────────────
-  Future<void> _geocodeDest(String text) async {
-    if (text.trim().isEmpty) return;
-    setState(() => _geocoding = true);
-    try {
-      final locations = await geo.locationFromAddress(text);
-      if (locations.isNotEmpty && mounted) {
-        final loc = locations.first;
-        setState(() {
-          _destLatLng = LatLng(loc.latitude, loc.longitude);
-          _destAddress = text;
-        });
-        _fitMapBounds();
-        _updateDistanceFromCoords();
-      }
-    } catch (_) {}
-    if (mounted) setState(() => _geocoding = false);
+  // ── Open full-screen location picker for pickup ──────────
+  Future<void> _openPickupPicker() async {
+    final appState = context.read<AppStateProvider>();
+    final result = await Navigator.push<LocationPickerResult>(
+      context,
+      MaterialPageRoute(
+        builder: (_) => LocationPickerScreen(
+          initialLatLng: _pickupLatLng,
+          title: appState.isAr ? 'تحديد موقع الانطلاق' : 'Set Pickup Location',
+          isAr: appState.isAr,
+        ),
+      ),
+    );
+    if (result != null && mounted) {
+      setState(() {
+        _pickupLatLng = result.latLng;
+        _pickupAddress = result.address;
+      });
+      _mapCtrl?.animateCamera(
+          CameraUpdate.newLatLngZoom(result.latLng, 14));
+      _updateDistanceFromCoords();
+    }
+  }
+
+  // ── Open full-screen location picker for destination ─────
+  Future<void> _openDestPicker() async {
+    final appState = context.read<AppStateProvider>();
+    final result = await Navigator.push<LocationPickerResult>(
+      context,
+      MaterialPageRoute(
+        builder: (_) => LocationPickerScreen(
+          initialLatLng: _destLatLng ?? _pickupLatLng,
+          title: appState.isAr ? 'تحديد الوجهة' : 'Set Destination',
+          isAr: appState.isAr,
+        ),
+      ),
+    );
+    if (result != null && mounted) {
+      setState(() {
+        _destLatLng = result.latLng;
+        _destAddress = result.address;
+        _destCtrl.text = result.address;
+      });
+      _fitMapBounds();
+      _updateDistanceFromCoords();
+    }
   }
 
   // ── Handle map tap → set destination ─────────────────────
@@ -617,10 +647,13 @@ class _TripCalculatorScreenState extends State<TripCalculatorScreen> {
                 ),
                 const SizedBox(width: 10),
                 Expanded(
-                  child: Text(
-                    _pickupAddress.isEmpty ? l.currentLocation : _pickupAddress,
-                    style: Theme.of(context).textTheme.bodyMedium,
-                    maxLines: 1, overflow: TextOverflow.ellipsis,
+                  child: GestureDetector(
+                    onTap: _openPickupPicker,
+                    child: Text(
+                      _pickupAddress.isEmpty ? l.currentLocation : _pickupAddress,
+                      style: Theme.of(context).textTheme.bodyMedium,
+                      maxLines: 1, overflow: TextOverflow.ellipsis,
+                    ),
                   ),
                 ),
                 if (_locating)
@@ -656,7 +689,8 @@ class _TripCalculatorScreenState extends State<TripCalculatorScreen> {
                 Expanded(
                   child: TextField(
                     controller: _destCtrl,
-                    onSubmitted: (v) => _geocodeDest(v),
+                    readOnly: true,
+                    onTap: _openDestPicker,
                     textInputAction: TextInputAction.search,
                     decoration: InputDecoration(
                       hintText: l.destinationHint,
@@ -675,7 +709,7 @@ class _TripCalculatorScreenState extends State<TripCalculatorScreen> {
                     child: CircularProgressIndicator(strokeWidth: 2))
                 else
                   GestureDetector(
-                    onTap: () => _geocodeDest(_destCtrl.text),
+                    onTap: _openDestPicker,
                     child: const Icon(Icons.search_rounded,
                       size: 18, color: AppColors.primary),
                   ),
