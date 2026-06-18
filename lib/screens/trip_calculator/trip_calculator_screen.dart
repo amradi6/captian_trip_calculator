@@ -1,5 +1,6 @@
-import 'dart:math' show asin, cos, pi, sin, sqrt;
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
@@ -32,6 +33,11 @@ class _TripCalculatorScreenState extends State<TripCalculatorScreen> {
   String _destAddress = '';
   bool _locating = false;
   bool _geocoding = false;
+
+  // ── Routing ───────────────────────────────────────────────
+  List<LatLng> _routePoints = [];
+  bool _routing = false;
+  static const _mapsApiKey = 'AIzaSyBRJVKoCxMkrGGGZe3tplYXB_MTNKuYiTY';
 
   // ── Fare rate controllers ─────────────────────────────────
   final _pricePerKmCtrl   = TextEditingController(text: '2.10');
@@ -213,28 +219,69 @@ class _TripCalculatorScreenState extends State<TripCalculatorScreen> {
     }
   }
 
-  // ── Calculate straight-line distance (Haversine) ─────────
-  void _updateDistanceFromCoords() {
+  // ── Fetch road route via Directions API ───────────────────
+  void _updateDistanceFromCoords() => _fetchRoute();
+
+  Future<void> _fetchRoute() async {
     if (_pickupLatLng == null || _destLatLng == null) return;
-    final km = _haversineKm(
-      _pickupLatLng!.latitude, _pickupLatLng!.longitude,
-      _destLatLng!.latitude,   _destLatLng!.longitude,
+    setState(() => _routing = true);
+
+    final url = Uri.parse(
+      'https://maps.googleapis.com/maps/api/directions/json'
+      '?origin=${_pickupLatLng!.latitude},${_pickupLatLng!.longitude}'
+      '&destination=${_destLatLng!.latitude},${_destLatLng!.longitude}'
+      '&mode=driving'
+      '&key=$_mapsApiKey',
     );
-    _distCtrl.text = km.toStringAsFixed(2);
-    _calculate();
+
+    try {
+      final response = await http.get(url);
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body) as Map<String, dynamic>;
+        final routes = data['routes'] as List?;
+        if (routes != null && routes.isNotEmpty) {
+          final leg = (routes[0]['legs'] as List)[0];
+          final meters = leg['distance']['value'] as int;
+          final encoded = routes[0]['overview_polyline']['points'] as String;
+          if (mounted) {
+            setState(() {
+              _routePoints = _decodePolyline(encoded);
+              _routing = false;
+            });
+            _distCtrl.text = (meters / 1000).toStringAsFixed(2);
+            _calculate();
+            return;
+          }
+        }
+      }
+    } catch (_) {}
+
+    // Fallback: straight-line distance
+    if (mounted) setState(() => _routing = false);
   }
 
-  double _haversineKm(double lat1, double lon1, double lat2, double lon2) {
-    const R = 6371.0;
-    final dLat = _toRad(lat2 - lat1);
-    final dLon = _toRad(lon2 - lon1);
-    final a = sin(dLat / 2) * sin(dLat / 2) +
-        cos(_toRad(lat1)) * cos(_toRad(lat2)) *
-        sin(dLon / 2) * sin(dLon / 2);
-    return R * 2 * asin(sqrt(a));
+  List<LatLng> _decodePolyline(String encoded) {
+    final points = <LatLng>[];
+    int index = 0, lat = 0, lng = 0;
+    while (index < encoded.length) {
+      int result = 0, shift = 0, b;
+      do {
+        b = encoded.codeUnitAt(index++) - 63;
+        result |= (b & 0x1f) << shift;
+        shift += 5;
+      } while (b >= 0x20);
+      lat += (result & 1) != 0 ? ~(result >> 1) : result >> 1;
+      result = 0; shift = 0;
+      do {
+        b = encoded.codeUnitAt(index++) - 63;
+        result |= (b & 0x1f) << shift;
+        shift += 5;
+      } while (b >= 0x20);
+      lng += (result & 1) != 0 ? ~(result >> 1) : result >> 1;
+      points.add(LatLng(lat / 1e5, lng / 1e5));
+    }
+    return points;
   }
-
-  double _toRad(double deg) => deg * pi / 180;
 
   // ── Fit map to show both markers ─────────────────────────
   void _fitMapBounds() {
@@ -368,6 +415,7 @@ class _TripCalculatorScreenState extends State<TripCalculatorScreen> {
     setState(() {
       _destLatLng      = null;
       _destAddress     = '';
+      _routePoints     = [];
       _estimatedFare   = 0;
       _hasTip          = false;
       _hasParking      = false;
@@ -411,10 +459,14 @@ class _TripCalculatorScreenState extends State<TripCalculatorScreen> {
             ? {
                 Polyline(
                   polylineId: const PolylineId('route'),
-                  points: [_pickupLatLng!, _destLatLng!],
+                  points: _routePoints.isNotEmpty
+                      ? _routePoints
+                      : [_pickupLatLng!, _destLatLng!],
                   color: AppColors.primary,
-                  width: 3,
-                  patterns: [PatternItem.dash(20), PatternItem.gap(10)],
+                  width: 4,
+                  patterns: _routePoints.isNotEmpty
+                      ? []
+                      : [PatternItem.dash(20), PatternItem.gap(10)],
                 ),
               }
             : {},
@@ -740,12 +792,19 @@ class _TripCalculatorScreenState extends State<TripCalculatorScreen> {
               ),
               child: Row(
                 children: [
-                  const Icon(Icons.route_outlined, size: 14,
-                    color: AppColors.primary),
+                  if (_routing)
+                    const SizedBox(
+                      width: 14, height: 14,
+                      child: CircularProgressIndicator(strokeWidth: 2,
+                        color: AppColors.primary))
+                  else
+                    const Icon(Icons.route_outlined, size: 14,
+                      color: AppColors.primary),
                   const SizedBox(width: 6),
                   Text(
-                    '${_distCtrl.text} km  •  '
-                    '${(double.tryParse(_distCtrl.text) ?? 0) > 0 ? "auto-calculated" : ""}',
+                    _routing
+                        ? 'Calculating road distance…'
+                        : '${_distCtrl.text} km  •  via roads',
                     style: const TextStyle(
                       fontSize: 12,
                       color: AppColors.primary,

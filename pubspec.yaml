@@ -26,6 +26,9 @@ dependencies:
   geolocator: ^13.0.1
   geocoding: ^3.0.0
 
+  # HTTP
+  http: ^1.2.0
+
   # Utils
   intl: ^0.20.0
   shared_preferences: ^2.3.1
