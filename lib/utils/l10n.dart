@@ -113,7 +113,7 @@ class L10n {
 
   String get pricePerMin => isAr ? 'سعر الدقيقة' : 'Price / min';
 
-  String get baseFare => isAr ? 'أجر البداية' : 'Base Fare';
+  String get baseFare => isAr ? 'فتح الباب' : 'Open Door';
 
   String get waitingPerMin => isAr ? 'انتظار/دقيقة' : 'Waiting / min';
 

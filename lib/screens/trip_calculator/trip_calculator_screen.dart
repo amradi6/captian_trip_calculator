@@ -53,6 +53,10 @@ class _TripCalculatorScreenState extends State<TripCalculatorScreen> {
   bool _hasTip     = false;
   bool _hasParking = false;
 
+  // ── Peak time multiplier ──────────────────────────────────
+  double _peakMultiplier = 1.0;
+  static const _peakOptions = [1.0, 1.1, 1.2, 1.3, 1.4];
+
   // ── Platform & result ────────────────────────────────────
   String _platform = 'Uber';
   double _estimatedFare = 0;
@@ -63,7 +67,7 @@ class _TripCalculatorScreenState extends State<TripCalculatorScreen> {
   double _timeFare     = 0;
   double _waitingFare  = 0;
 
-  final _platforms = ['Uber', 'Careem', 'Bolt', 'InDrive', 'Other'];
+  final _platforms = ['Uber', 'moj','jenny', 'Bolt', 'InDrive', 'Other'];
 
   @override
   void initState() {
@@ -264,7 +268,7 @@ class _TripCalculatorScreenState extends State<TripCalculatorScreen> {
     final tip      = _hasTip    ? (double.tryParse(_tipCtrl.text)     ?? 0) : 0;
     final parking  = _hasParking ? (double.tryParse(_parkingCtrl.text) ?? 0) : 0;
 
-    final dFare = km * perKm;
+    final dFare = km * perKm * _peakMultiplier;
     final tFare = mins * perMin;
     final wFare = waitMins * waitRate;
     final total = door + dFare + tFare + wFare + tip + parking;
@@ -362,11 +366,12 @@ class _TripCalculatorScreenState extends State<TripCalculatorScreen> {
     _tipCtrl.text     = '0.00';
     _parkingCtrl.text = '0.00';
     setState(() {
-      _destLatLng    = null;
-      _destAddress   = '';
-      _estimatedFare = 0;
-      _hasTip        = false;
-      _hasParking    = false;
+      _destLatLng      = null;
+      _destAddress     = '';
+      _estimatedFare   = 0;
+      _hasTip          = false;
+      _hasParking      = false;
+      _peakMultiplier  = 1.0;
     });
   }
 
@@ -594,6 +599,13 @@ class _TripCalculatorScreenState extends State<TripCalculatorScreen> {
                       unit: 'min',
                       controller: _waitMinsCtrl)),
                   ]),
+
+                  const SizedBox(height: 14),
+
+                  // ── Peak time multiplier ───────────────────
+                  _sectionLabel(context, l.isAr ? 'وقت الذروة' : 'Peak Time'),
+                  const SizedBox(height: 6),
+                  _peakMultiplierDropdown(cs),
 
                   const SizedBox(height: 14),
 
@@ -839,7 +851,10 @@ class _TripCalculatorScreenState extends State<TripCalculatorScreen> {
           const SizedBox(height: 10),
           _fareRow(l.baseFare,
             '${(double.tryParse(_doorOpeningCtrl.text) ?? 0).toStringAsFixed(2)} $currency'),
-          _fareRow(l.isAr ? 'أجرة المسافة (${_distCtrl.text} km)' : 'Distance (${_distCtrl.text} km)',
+          _fareRow(
+            l.isAr
+              ? 'أجرة المسافة (${_distCtrl.text} km)${_peakMultiplier > 1.0 ? " ×$_peakMultiplier" : ""}'
+              : 'Distance (${_distCtrl.text} km)${_peakMultiplier > 1.0 ? " ×$_peakMultiplier" : ""}',
             '${_distanceFare.toStringAsFixed(2)} $currency'),
           if ((double.tryParse(_durationCtrl.text) ?? 0) > 0)
             _fareRow(l.isAr ? 'أجرة الوقت (${_durationCtrl.text} min)' : 'Time (${_durationCtrl.text} min)',
@@ -888,6 +903,38 @@ class _TripCalculatorScreenState extends State<TripCalculatorScreen> {
       ],
     ),
   );
+
+  Widget _peakMultiplierDropdown(ColorScheme cs) {
+    final isAr = context.read<AppStateProvider>().isAr;
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12),
+      decoration: BoxDecoration(
+        color: Theme.of(context).inputDecorationTheme.fillColor,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: _peakMultiplier > 1.0 ? AppColors.primary : AppColors.divider,
+          width: _peakMultiplier > 1.0 ? 1.5 : 1.0,
+        ),
+      ),
+      child: DropdownButtonHideUnderline(
+        child: DropdownButton<double>(
+          value: _peakMultiplier,
+          isExpanded: true,
+          items: _peakOptions.map((v) => DropdownMenuItem(
+            value: v,
+            child: Text(v == 1.0
+              ? (isAr ? 'بدون ذروة  (×1.0)' : 'No Peak  (×1.0)')
+              : '×$v  —  ${isAr ? "وقت ذروة" : "Peak Surge"}',
+            ),
+          )).toList(),
+          onChanged: (v) => setState(() {
+            _peakMultiplier = v ?? 1.0;
+            _calculate();
+          }),
+        ),
+      ),
+    );
+  }
 
   Widget _platformDropdown(ColorScheme cs) {
     return Container(
