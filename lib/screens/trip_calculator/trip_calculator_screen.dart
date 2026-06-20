@@ -61,7 +61,10 @@ class _TripCalculatorScreenState extends State<TripCalculatorScreen> {
 
   // ── Peak time multiplier ──────────────────────────────────
   double _peakMultiplier = 1.0;
-  static const _peakOptions = [1.0, 1.1, 1.2, 1.3, 1.4];
+   final List<double> _peakOptions = List.generate(
+    21,
+        (index) => double.parse((1.0 + (index * 0.1)).toStringAsFixed(1)),
+  );
 
   // ── Platform & result ────────────────────────────────────
   String _platform = 'Uber';
