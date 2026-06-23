@@ -18,6 +18,7 @@ import 'screens/dashboard/main_scaffold.dart';
 import 'screens/trip_details/trip_details_screen.dart';
 import 'screens/settings/app_settings_screen.dart';
 import 'screens/profile/personal_info_screen.dart';
+import 'screens/legal/legal_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -91,6 +92,10 @@ class CaptainApp extends StatelessWidget {
             return MaterialPageRoute(builder: (_) => const AppSettingsScreen());
           case '/personal-info':
             return MaterialPageRoute(builder: (_) => const PersonalInfoScreen());
+          case '/terms':
+            return MaterialPageRoute(builder: (_) => const TermsScreen());
+          case '/privacy':
+            return MaterialPageRoute(builder: (_) => const PrivacyPolicyScreen());
           default:
             return MaterialPageRoute(builder: (_) => const SplashScreen());
         }

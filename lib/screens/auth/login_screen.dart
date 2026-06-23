@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../providers/auth_provider.dart';
@@ -186,7 +187,43 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: 16),
+              // Terms & Privacy consent line
+              Center(
+                child: Text.rich(
+                  TextSpan(
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: cs.secondary,
+                        ),
+                    children: [
+                      TextSpan(text: l.agreePrefix),
+                      TextSpan(
+                        text: l.termsAndConditions,
+                        style: const TextStyle(
+                          color: AppColors.primary,
+                          fontWeight: FontWeight.w600,
+                        ),
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () =>
+                              Navigator.of(context).pushNamed('/terms'),
+                      ),
+                      TextSpan(text: l.and),
+                      TextSpan(
+                        text: l.privacyPolicy,
+                        style: const TextStyle(
+                          color: AppColors.primary,
+                          fontWeight: FontWeight.w600,
+                        ),
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () =>
+                              Navigator.of(context).pushNamed('/privacy'),
+                      ),
+                    ],
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              const SizedBox(height: 16),
               Center(
                 child: Text(
                   'جميع الحقوق محفوظة لمؤسسة قوة الكباتن 2026',

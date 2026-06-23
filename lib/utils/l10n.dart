@@ -225,6 +225,17 @@ class L10n {
   String get tripAlertsDesc =>
       isAr ? 'مسار الطريق في الوقت الفعلي' : 'Real-time route';
 
+  // Legal
+  String get termsAndConditions =>
+      isAr ? 'الشروط والأحكام' : 'Terms & Conditions';
+
+  String get privacyPolicy => isAr ? 'سياسة الخصوصية' : 'Privacy Policy';
+
+  String get agreePrefix =>
+      isAr ? 'بمتابعتك فإنك توافق على ' : 'By continuing, you agree to our ';
+
+  String get and => isAr ? ' و' : ' and ';
+
   // Days of week
   List<String> get weekDays => isAr
       ? [
